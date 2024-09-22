@@ -1,16 +1,13 @@
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { TimeRecord } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-import { transformActivityTypeEnum, transformTimeRecord } from "../dto";
+import { transformBloodPressure } from "../dto";
 
 interface PutRequestBody {
   datetime: string;
-  durationInMin: number;
-  name: string;
-  details: string;
-  location: string;
-  activityType: string;
+  sbp: number;
+  dbp: number;
+  pulse: number;
 }
 
 export async function PUT(
@@ -24,32 +21,22 @@ export async function PUT(
   }
 
   const { id: userId } = user;
-  const {
-    datetime,
-    name,
-    details,
-    location,
-    activityType,
-    durationInMin,
-  }: PutRequestBody = await request.json();
+  const { datetime, sbp, dbp, pulse }: PutRequestBody = await request.json();
   const { id } = params;
 
-  const timeRecord = await db.timeRecord.update({
+  const bloodPressure = await db.bloodPressure.update({
     data: {
       datetime,
-      name,
-      details,
-      location,
-      authorId: userId,
-      activityType: transformActivityTypeEnum(activityType),
-      durationInMin,
+      sbp,
+      dbp,
+      pulse,
     },
     where: {
       id,
       authorId: userId,
     },
   });
-  return NextResponse.json(transformTimeRecord(timeRecord));
+  return NextResponse.json(transformBloodPressure(bloodPressure));
 }
 
 export async function DELETE(
@@ -65,7 +52,7 @@ export async function DELETE(
   const { id: userId } = user;
   const { id } = params;
 
-  await db.timeRecord.delete({
+  await db.bloodPressure.delete({
     where: {
       id,
       authorId: userId,

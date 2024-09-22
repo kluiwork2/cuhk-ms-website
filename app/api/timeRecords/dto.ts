@@ -1,10 +1,18 @@
 import { TimeRecord, activityType as ActivityEnum } from "@prisma/client";
+import dayjs from "dayjs";
 
 export interface TimeRecordDTO
-  extends Omit<TimeRecord, "datetime" | "endAt" | "activityType"> {
+  extends Omit<TimeRecord, "datetime" | "activityType"> {
   datetime: string;
-  endAt: string;
   activityType: string;
+}
+
+export function transformTimeRecord(timeRecord: TimeRecord) {
+  return {
+    ...timeRecord,
+    activityType: transformActivityType(timeRecord.activityType),
+    datetime: dayjs(timeRecord.datetime).format("YYYY-MM-DD HH:mm:ss"),
+  };
 }
 
 export function transformActivityTypeEnum(activityType: string) {

@@ -61,12 +61,14 @@ export const TimeRecordTable: React.FC<Props> = ({
             <div className="p-4 flex flex-col gap-1 bg-white rounded-lg">
               <div className="text-xl font-bold mb-4">{timeRecord.name}</div>
               <div>開始時間: {timeRecord.datetime}</div>
-              <div>完結時間: {timeRecord.endAt}</div>
+              <div>時長: {timeRecord.durationInMin}分鐘</div>
               <div>地點: {timeRecord.location}</div>
-              <div>類型: {ACTIVITIES_TYPE_OPTIONS.find((t) => t.value === timeRecord.activityType)?.label || '-'}</div>
-              <div>上壓(mmhg): {timeRecord.sbp}</div>
-              <div>下壓(mmhg): {timeRecord.dbp}</div>
-              <div>脈搏(mmhg): {timeRecord.pulse}</div>
+              <div>
+                類型:{" "}
+                {ACTIVITIES_TYPE_OPTIONS.find(
+                  (t) => t.value === timeRecord.activityType
+                )?.label || "-"}
+              </div>
               <div>
                 <div>詳情:</div>
                 <div className="text-xs text-gray-500 mt-2">

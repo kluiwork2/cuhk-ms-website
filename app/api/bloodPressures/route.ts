@@ -1,10 +1,10 @@
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { TimeRecord } from "@prisma/client";
+import { BloodPressure } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import dayjs from "dayjs";
 import { MONTHLY_SCHEDULER_MONTH_RANGE } from "@/constants/monthlyscheduler";
-import { transformActivityType, transformActivityTypeEnum, transformTimeRecord } from "./dto";
+import { transformBloodPressure } from "./dto";
 
 export async function GET() {
   const user = await currentUser();
@@ -15,7 +15,7 @@ export async function GET() {
 
   const { id: userId } = user;
 
-  const timeRecords = await db.timeRecord.findMany({
+  const bloodPressure = await db.bloodPressure.findMany({
     where: {
       authorId: userId,
       datetime: {
@@ -29,16 +29,14 @@ export async function GET() {
       datetime: "asc",
     },
   });
-  return NextResponse.json(timeRecords.map(transformTimeRecord));
+  return NextResponse.json(bloodPressure.map(transformBloodPressure));
 }
 
 interface PostRequestBody {
   datetime: string;
-  durationInMin: number;
-  name: string;
-  details: string;
-  location: string;
-  activityType: string;
+  sbp: number;
+  dbp: number;
+  pulse: number;
 }
 
 export async function POST(request: NextRequest, res: NextResponse) {
@@ -49,25 +47,16 @@ export async function POST(request: NextRequest, res: NextResponse) {
   }
 
   const { id: userId } = user;
-  const {
-    datetime,
-    activityType,
-    durationInMin,
-    name,
-    details,
-    location,
-  }: PostRequestBody = await request.json();
+  const { datetime, sbp, dbp, pulse }: PostRequestBody = await request.json();
 
-  const timeRecord = await db.timeRecord.create({
+  const bloodPressure = await db.bloodPressure.create({
     data: {
-      datetime,
-      name,
-      details,
-      location,
       authorId: userId,
-      activityType: transformActivityTypeEnum(activityType),
-      durationInMin,
+      datetime,
+      sbp,
+      dbp,
+      pulse,
     },
   });
-  return NextResponse.json(transformTimeRecord(timeRecord));
+  return NextResponse.json(transformBloodPressure(bloodPressure));
 }

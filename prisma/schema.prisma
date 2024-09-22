@@ -27,6 +27,8 @@ model User {
   twoFactorConfirmation TwoFactorConfirmation?
   Activity              Activity[]
   TimeRecord            TimeRecord[]
+  BloodSugar            BloodSugar[]
+  BloodPressure         BloodPressure[]
 }
 
 model Account {
@@ -126,19 +128,48 @@ model Place {
 }
 
 model TimeRecord {
-  id           String       @id @default(cuid())
-  author       User         @relation(fields: [authorId], references: [id])
-  authorId     String
-  name         String
-  details      String
-  location     String?
-  datetime     DateTime
-  activityType activityType @default(WALKING)
-  endAt        DateTime
-
-  sbp   Int @default(80)
-  dbp   Int @default(80)
-  pulse Int @default(80)
+  id            String       @id @default(cuid())
+  author        User         @relation(fields: [authorId], references: [id])
+  authorId      String
+  name          String
+  details       String
+  location      String?
+  datetime      DateTime
+  durationInMin Int
+  activityType  activityType @default(WALKING)
 
   @@index([authorId])
+}
+
+model BloodSugar {
+  id       String @id @default(cuid())
+  author   User   @relation(fields: [authorId], references: [id])
+  authorId String
+
+  datetime        DateTime
+  beforeBreakfast Int?
+  afterBreakfast  Int?
+  beforeLunch     Int?
+  afterLunch      Int?
+  beforeDinner    Int?
+  afterDinner     Int?
+  beforeSleep     Int?
+  remarks         String?
+
+  @@index([authorId])
+  @@index([authorId, datetime])
+}
+
+model BloodPressure {
+  id       String   @id @default(cuid())
+  author   User     @relation(fields: [authorId], references: [id])
+  authorId String
+  datetime DateTime
+
+  sbp   Int?
+  dbp   Int?
+  pulse Int?
+
+  @@index([authorId])
+  @@index([authorId, datetime])
 }

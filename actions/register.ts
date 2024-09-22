@@ -30,14 +30,10 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
       name,
       email,
       password: hashedPassword,
+      // To bypass verification
+      emailVerified: new Date(),
     },
   });
 
-  const verificationToken = await generateVerificationToken(email);
-  await sendVerificationEmail(
-    verificationToken.email,
-    verificationToken.token,
-  );
-
-  return { success: "Confirmation email sent!" };
+  return { success: "Registered. Redirecting to login page" };
 };

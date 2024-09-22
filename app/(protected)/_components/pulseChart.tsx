@@ -12,8 +12,8 @@ import {
 } from "chart.js";
 import dayjs from "dayjs";
 import "chartjs-adapter-dayjs-4/dist/chartjs-adapter-dayjs-4.esm";
-import { TimeRecordDTO } from "@/app/api/timeRecords/dto";
 import { useMemo } from "react";
+import { BloodPressureDTO } from "@/app/api/bloodPressures/dto";
 
 ChartJS.register(
   TimeScale,
@@ -26,22 +26,23 @@ ChartJS.register(
   Legend
 );
 
-const CHARTS: { title: string; key: keyof TimeRecordDTO }[] = [
+const CHARTS: { title: string; key: keyof BloodPressureDTO }[] = [
   { title: "上壓 (mmHg)", key: "sbp" },
   { title: "下壓 (mmHg)", key: "dbp" },
   { title: "脈搏 (mmHg)", key: "pulse" },
 ];
 
 interface PulseChartProps {
-  timeRecords: TimeRecordDTO[];
+  bloodPressures: BloodPressureDTO[];
 }
 
-const PulseChart: React.FC<PulseChartProps> = ({ timeRecords }) => {
+const PulseChart: React.FC<PulseChartProps> = ({ bloodPressures }) => {
   const { morning, afternoon, night } = useMemo(() => {
-    let morning: TimeRecordDTO[] = [];
-    let afternoon: TimeRecordDTO[] = [];
-    let night: TimeRecordDTO[] = [];
-    timeRecords.forEach((t) => {
+    let morning: BloodPressureDTO[] = [];
+    let afternoon: BloodPressureDTO[] = [];
+    let night: BloodPressureDTO[] = [];
+
+    bloodPressures.forEach((t) => {
       const hour = dayjs(t.datetime).hour();
       if (hour > 5 && hour < 12) {
         morning.push(t);
@@ -52,7 +53,7 @@ const PulseChart: React.FC<PulseChartProps> = ({ timeRecords }) => {
       }
     });
     return { morning, afternoon, night };
-  }, [timeRecords]);
+  }, [bloodPressures]);
 
   return CHARTS.map(({ title, key }) => (
     <Line
@@ -93,10 +94,10 @@ const PulseChart: React.FC<PulseChartProps> = ({ timeRecords }) => {
       }}
       data={{
         labels:
-          timeRecords.length > 0
+          bloodPressures.length > 0
             ? [
-                dayjs(timeRecords[0].datetime).startOf("month").toDate(),
-                dayjs(timeRecords[timeRecords.length - 1].datetime)
+                dayjs(bloodPressures[0].datetime).startOf("month").toDate(),
+                dayjs(bloodPressures[bloodPressures.length - 1].datetime)
                   .endOf("month")
                   .toDate(),
               ]

@@ -37,6 +37,7 @@
     "chart.js": "^4.4.4",
     "chartjs-adapter-dayjs-4": "^1.0.4",
     "class-variance-authority": "^0.7.0",
+    "classnames": "^2.5.1",
     "clsx": "^2.0.0",
     "dayjs": "^1.11.13",
     "embla-carousel-react": "^8.0.2",
