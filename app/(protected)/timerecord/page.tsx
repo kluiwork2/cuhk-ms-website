@@ -43,7 +43,7 @@ const TimeRecordPage = () => {
           await Promise.all([
             fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/timeRecords`)
               .then((v) => v.json())
-              .then((timeRecord) => setTimeRecords(timeRecords)),
+              .then((timeRecords) => setTimeRecords(timeRecords)),
             fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/bloodSugars`)
               .then((v) => v.json())
               .then((bloodSugars) => setBloodSugar(bloodSugars)),
