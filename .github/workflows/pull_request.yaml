@@ -1,0 +1,15 @@
+name: Validate Next.js Build
+
+on:
+  pull_request
+
+jobs:
+  validate-build:
+    name: Validate Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm install
+      - name: Build Next.js project
+        run: npm run build
