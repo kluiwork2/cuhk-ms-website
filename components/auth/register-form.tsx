@@ -60,7 +60,6 @@ export const RegisterForm = () => {
       headerLabel="立即注册"
       backButtonLabel="已有帳號？"
       backButtonHref="/auth/login"
-      showSocial
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">

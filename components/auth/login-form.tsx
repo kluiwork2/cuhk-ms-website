@@ -74,7 +74,6 @@ export const LoginForm = () => {
       headerLabel="請登入"
       backButtonLabel="還沒有帳戶？"
       backButtonHref="/auth/register"
-      showSocial
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
