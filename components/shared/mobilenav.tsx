@@ -26,7 +26,7 @@ const MobileNav = () => {
           <HiOutlineMenu className="cursor-pointer h-8 w-8" />
         </SheetTrigger>
         <SheetContent className="flex flex-col gap-6 bg-white md:hidden">
-          <Image src="/logo.svg" alt="logo" width={128} height={38} />
+          <Image src="/oldman.png" alt="logo" width={128} height={38} />
           {isLoggedIn ? (
             <LogoutButton>
               <Button variant="default" size="lg">
