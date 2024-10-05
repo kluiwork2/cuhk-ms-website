@@ -53,16 +53,12 @@ export async function POST(request: NextRequest, res: NextResponse) {
     datetime,
     activityType,
     durationInMin,
-    name,
-    details,
     location,
   }: PostRequestBody = await request.json();
 
   const timeRecord = await db.timeRecord.create({
     data: {
       datetime,
-      name,
-      details,
       location,
       authorId: userId,
       activityType: transformActivityTypeEnum(activityType),

@@ -37,8 +37,6 @@ import { TimeRecordDTO as TimeRecord } from "@/app/api/timeRecords/dto";
 
 const formSchema = z.object({
   datetime: z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/g),
-  name: z.string(),
-  details: z.string(),
   location: z.string().optional(),
   activityType: z.string(),
   durationInMin: z.number().min(1),
@@ -57,8 +55,6 @@ export const TimeRecordDialog: React.FC<Props> = ({
     defaultValues: {
       datetime: dayjs().format("YYYY-MM-DDTHH:mm"),
       ...(timeRecord && {
-        name: timeRecord.name,
-        details: timeRecord.details,
         location: timeRecord.location ?? undefined,
         activityType: timeRecord.activityType,
         durationInMin: timeRecord.durationInMin,
@@ -141,36 +137,6 @@ export const TimeRecordDialog: React.FC<Props> = ({
                     <FormLabel>日期時間</FormLabel>
                     <FormControl>
                       <Input type="datetime-local" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
-            />
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    <FormLabel>活動名稱</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
-            />
-            <FormField
-              control={form.control}
-              name="details"
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    <FormLabel>詳情</FormLabel>
-                    <FormControl>
-                      <Textarea {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

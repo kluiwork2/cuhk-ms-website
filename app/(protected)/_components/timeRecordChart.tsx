@@ -80,6 +80,11 @@ const TimeRecordChart: React.FC<TimeRecordChartProps> = ({ timeRecords }) => {
               display: true,
               text: "日期",
             },
+            min: dayjs(timeRecords[0].datetime).startOf("month").toISOString(),
+            max : dayjs(timeRecords[timeRecords.length - 1].datetime).toISOString() ,
+            ticks:{
+              includeBounds: true,
+            }
           },
         },
       }}
