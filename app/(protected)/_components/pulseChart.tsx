@@ -89,6 +89,13 @@ const PulseChart: React.FC<PulseChartProps> = ({ bloodPressures }) => {
               display: true,
               text: "Date",
             },
+            min: dayjs(bloodPressures[0].datetime).startOf("month").toISOString(),
+            max: dayjs(
+              bloodPressures[bloodPressures.length - 1].datetime
+            ).toISOString(),
+            ticks: {
+              includeBounds: true,
+            },
           },
         },
       }}

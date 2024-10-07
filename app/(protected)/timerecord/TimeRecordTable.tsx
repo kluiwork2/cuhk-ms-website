@@ -1,7 +1,7 @@
 "use client";
 
 import { TimeRecordDTO as TimeRecord } from "@/app/api/timeRecords/dto";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import _groupBy from "lodash/groupBy";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import dayjs from "dayjs";
 import zhTwLocale from "@fullcalendar/core/locales/zh-tw";
-import { ACTIVITIES_TYPE_OPTIONS } from "@/constants/monthlyscheduler";
+import { ACTIVITIES_TYPE_OPTIONS, ACTIVITIES_TYPE_ZH_MAP } from "@/constants/monthlyscheduler";
 
 interface Props {
   timeRecords: TimeRecord[];
@@ -51,7 +51,7 @@ export const TimeRecordTable: React.FC<Props> = ({
         }}
         events={timeRecords.map((t) => ({
           id: t.id,
-          title: t.name,
+          title: ACTIVITIES_TYPE_ZH_MAP[t.activityType],
           date: t.datetime,
         }))}
       />

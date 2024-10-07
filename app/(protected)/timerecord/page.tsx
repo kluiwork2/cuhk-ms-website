@@ -88,7 +88,7 @@ const TimeRecordPage = () => {
     <div className="w-4/5 mb-8">
       <div className="text-3xl font-bold pb-8 flex justify-between items-center flex-col gap-y-4">
         <div>我要記錄</div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <TimeRecordDialog onSuccess={() => fetchRecords("timeRecords")} />
           <BloodSugarDialog onSuccess={() => fetchRecords("bloodSugars")} />
           <BloodPressureDialog
@@ -97,7 +97,7 @@ const TimeRecordPage = () => {
           {!isLoading && (
             <Dialog>
               <DialogTrigger asChild>
-                <Button className="ml-auto" variant="outline">
+                <Button variant="outline">
                   圖表分析
                 </Button>
               </DialogTrigger>

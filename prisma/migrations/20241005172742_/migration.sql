@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "TimeRecord" ALTER COLUMN "name" DROP NOT NULL,
+ALTER COLUMN "details" DROP NOT NULL;
