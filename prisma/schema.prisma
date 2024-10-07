@@ -131,8 +131,8 @@ model TimeRecord {
   id            String       @id @default(cuid())
   author        User         @relation(fields: [authorId], references: [id])
   authorId      String
-  name          String
-  details       String
+  name          String?
+  details       String?
   location      String?
   datetime      DateTime
   durationInMin Int

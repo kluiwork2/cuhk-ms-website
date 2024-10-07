@@ -341,3 +341,19 @@ h4 {
 .fc .fc-popover {
   z-index: 2;
 }
+
+.fc .fc-list-event:hover td {
+  background-color: inherit !important;
+}
+
+.fc-header-toolbar {
+  @apply flex-col md:flex-row;
+}
+
+.fc-toolbar-title {
+  @apply pb-4;
+}
+
+.fc-toolbar-chunk {
+  @apply flex gap-2 md:block;
+}

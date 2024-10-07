@@ -15,3 +15,19 @@ export const ACTIVITIES_TYPE_OPTIONS = [
   { label: "網球", value: "TENNIS" },
   { label: "打拳", value: "BOXING" },
 ];
+export const ACTIVITIES_TYPE_ZH_MAP: Record<string, string> = {
+  WALKING: "輕鬆步行",
+  TAI_JI: "太極",
+  STRETCHING: "伸展運動",
+  FAST_WALK: "快步走",
+  SWIMMING: "游泳",
+  RACING: "輕鬆地騎單車",
+  RUNNING: "跑步",
+  YOGA: "瑜珈",
+  GOLF: "高爾夫球",
+  BALL: "球類運動",
+  DANCE: "跳舞",
+  HIKING: "行山",
+  TENNIS: "網球",
+  BOXING: "打拳",
+};

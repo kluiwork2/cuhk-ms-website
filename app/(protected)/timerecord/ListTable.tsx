@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { BloodPressureDialog } from "./BloodPressureDialog";
 import { BloodSugarDialog } from "./BloodSugarDialog";
 import { TimeRecordDialog } from "./TimeRecordDialog";
+import { ACTIVITIES_TYPE_ZH_MAP } from "@/constants/monthlyscheduler";
 interface Props {
   timeRecords: TimeRecord[];
   bloodSugars: BloodSugar[];
@@ -118,7 +119,7 @@ export const ListTable: React.FC<Props> = ({
               {timeRecord.datetime}
             </div>
             <div className="bg-white px-4 py-2 flex items-center">
-              {timeRecord.activityType}
+              {ACTIVITIES_TYPE_ZH_MAP[timeRecord.activityType]}
             </div>
             <div className="bg-white px-4 py-2 flex items-center">
               {timeRecord.durationInMin}分鐘
