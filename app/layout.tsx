@@ -8,6 +8,13 @@ import { Footer } from "@/components/shared/footer";
 import { Navbar } from "@/components/shared/navbar";
 
 import local from "next/font/local";
+import utc from "dayjs/plugin/utc";
+import timezone from 'dayjs/plugin/timezone'
+import dayjs from "dayjs";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.tz.setDefault("Asia/Hong_Kong");
 
 const dengxian = local({
   src: [
