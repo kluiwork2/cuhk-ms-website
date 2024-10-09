@@ -22,7 +22,7 @@ export async function GET() {
         gte: dayjs()
           .add(-MONTHLY_SCHEDULER_MONTH_RANGE, "months")
           .toISOString(),
-        lte: dayjs().add(MONTHLY_SCHEDULER_MONTH_RANGE, "months").toISOString(),
+        lte: dayjs().add(1, "day").startOf("day").toISOString(),
       },
     },
     orderBy: {

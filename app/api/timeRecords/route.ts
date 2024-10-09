@@ -4,7 +4,11 @@ import { TimeRecord } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import dayjs from "dayjs";
 import { MONTHLY_SCHEDULER_MONTH_RANGE } from "@/constants/monthlyscheduler";
-import { transformActivityType, transformActivityTypeEnum, transformTimeRecord } from "./dto";
+import {
+  transformActivityType,
+  transformActivityTypeEnum,
+  transformTimeRecord,
+} from "./dto";
 
 export async function GET() {
   const user = await currentUser();
@@ -22,7 +26,7 @@ export async function GET() {
         gte: dayjs()
           .add(-MONTHLY_SCHEDULER_MONTH_RANGE, "months")
           .toISOString(),
-        lte: dayjs().add(MONTHLY_SCHEDULER_MONTH_RANGE, "months").toISOString(),
+        lte: dayjs().add(1, "day").startOf("day").toISOString(),
       },
     },
     orderBy: {
@@ -49,12 +53,8 @@ export async function POST(request: NextRequest, res: NextResponse) {
   }
 
   const { id: userId } = user;
-  const {
-    datetime,
-    activityType,
-    durationInMin,
-    location,
-  }: PostRequestBody = await request.json();
+  const { datetime, activityType, durationInMin, location }: PostRequestBody =
+    await request.json();
 
   const timeRecord = await db.timeRecord.create({
     data: {
