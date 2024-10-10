@@ -155,7 +155,11 @@ export const BloodSugarDialog: React.FC<Props> = ({
                   <FormItem className="flex flex-col">
                     <FormLabel>日期時間</FormLabel>
                     <FormControl>
-                      <Input type="datetime-local" {...field} />
+                      <Input
+                        type="datetime-local"
+                        max={dayjs().toISOString().slice(0, 16)}
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
