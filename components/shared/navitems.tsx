@@ -38,9 +38,6 @@ const NavItems = () => {
         </DropdownMenu>
       </li>
       <li>
-        <Link href={"/general/smoke"}>吸煙</Link>
-      </li>
-      <li>
         <Link href={"/general/sports"}>做運動</Link>
       </li>
       <li>

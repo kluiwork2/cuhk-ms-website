@@ -14,36 +14,9 @@ export const Navbar = () => {
       <div className="flex gap-x-2 max-w-[calc(100vw-200px)] flex-wrap gap-y-2">
         <Button
           asChild
-          variant={pathname === "/dashboard" ? "default" : "outline"}
-        >
-          <Link href="/dashboard">控制板</Link>
-        </Button>
-        <Button
-          asChild
-          variant={pathname === "/server" ? "default" : "outline"}
-        >
-          <Link href="/server">Server</Link>
-        </Button>
-        <Button
-          asChild
           variant={pathname === "/places" ? "default" : "outline"}
         >
           <Link href="/places">尋找設施</Link>
-        </Button>
-        <Button
-          asChild
-          variant={pathname === "/client" ? "default" : "outline"}
-        >
-          <Link href="/client">Client</Link>
-        </Button>
-        <Button asChild variant={pathname === "/admin" ? "default" : "outline"}>
-          <Link href="/admin">Admin</Link>
-        </Button>
-        <Button
-          asChild
-          variant={pathname === "/settings" ? "default" : "outline"}
-        >
-          <Link href="/settings">Settings</Link>
         </Button>
         <Button
           asChild

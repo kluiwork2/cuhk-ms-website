@@ -49,7 +49,7 @@ export default function Home() {
               </div>
             </div>
             <div className="w-full py-6 lg:w-1/3 md:py-8 lg:py-12">
-              <img src="/oldman.jpeg" alt="" />
+              <img src="/oldman.png" alt="" />
             </div>
           </div>
           <div className="flex flex-col items-center pt-5">
