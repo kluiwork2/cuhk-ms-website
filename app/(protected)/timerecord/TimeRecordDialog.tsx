@@ -50,11 +50,13 @@ export const TimeRecordDialog: React.FC<Props> = ({
   onSuccess,
   timeRecord,
 }) => {
+  const isEditing = !!timeRecord;
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       datetime: dayjs().format("YYYY-MM-DDTHH:mm"),
       ...(timeRecord && {
+        datetime: dayjs(timeRecord.datetime).format("YYYY-MM-DDTHH:mm"),
         location: timeRecord.location ?? undefined,
         activityType: timeRecord.activityType,
         durationInMin: timeRecord.durationInMin,
@@ -86,7 +88,7 @@ export const TimeRecordDialog: React.FC<Props> = ({
             }),
           }
         );
-        toast.success("運動紀錄更新成功!");
+        toast.success("成功編輯");
       } else {
         await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/timeRecords`, {
           method: "POST",
@@ -113,14 +115,12 @@ export const TimeRecordDialog: React.FC<Props> = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">
-          {timeRecord ? "編輯" : "新增運動紀錄"}
-        </Button>
+        <Button variant="outline">{isEditing ? "編輯" : "新增運動紀錄"}</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] max-h-[80%] overflow-auto">
         <DialogHeader>
           <DialogTitle>
-            {timeRecord ? "編輯運動紀錄" : "新增運動紀錄"}
+            {isEditing ? "編輯運動紀錄" : "新增運動紀錄"}
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
@@ -138,11 +138,7 @@ export const TimeRecordDialog: React.FC<Props> = ({
                     <FormControl>
                       <Input
                         type="datetime-local"
-                        max={dayjs()
-                          .add(1, "day")
-                          .startOf("day")
-                          .toISOString()
-                          .slice(0, 16)}
+                        max={dayjs().format("YYYY-MM-DDT23:59")}
                         {...field}
                       />
                     </FormControl>
@@ -170,20 +166,19 @@ export const TimeRecordDialog: React.FC<Props> = ({
               control={form.control}
               name="durationInMin"
               render={({ field }) => {
-                console.log(
-                  "%capp/(protected)/timerecord/CreateTimeRecordDialog.tsx:117 {field}",
-                  "color: #007acc;",
-                  { field }
-                );
                 return (
                   <FormItem className="flex flex-col">
                     <FormLabel>分鐘</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
-                        onChange={(event) =>
-                          field.onChange(+event.target.value ?? 0)
-                        }
+                        onChange={(event) => {
+                          if (Number.isNaN(+event.target.value)) {
+                            event.preventDefault();
+                            return;
+                          }
+                          field.onChange(+event.target.value);
+                        }}
                       />
                     </FormControl>
                     <FormMessage />

@@ -51,6 +51,7 @@ export const BloodSugarDialog: React.FC<Props> = ({
     defaultValues: {
       datetime: dayjs().format("YYYY-MM-DDTHH:mm"),
       ...(bloodSugar && {
+        datetime: dayjs(bloodSugar.datetime).format("YYYY-MM-DDTHH:mm"),
         beforeBreakfast: bloodSugar.beforeBreakfast ?? undefined,
         afterBreakfast: bloodSugar.afterBreakfast ?? undefined,
         beforeLunch: bloodSugar.beforeLunch ?? undefined,
@@ -106,6 +107,7 @@ export const BloodSugarDialog: React.FC<Props> = ({
             }),
           }
         );
+        toast.success("成功編輯");
       } else {
         await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/bloodSugars`, {
           method: "POST",
@@ -117,10 +119,10 @@ export const BloodSugarDialog: React.FC<Props> = ({
             ...data,
           }),
         });
+        toast.success("血糖紀錄新增!");
       }
       setOpen(false);
       onSuccess();
-      toast.success("血糖紀錄新增!");
       form.reset();
     } catch (e) {
       console.error(e);
@@ -157,11 +159,7 @@ export const BloodSugarDialog: React.FC<Props> = ({
                     <FormControl>
                       <Input
                         type="datetime-local"
-                        max={dayjs()
-                          .add(1, "day")
-                          .startOf("day")
-                          .toISOString()
-                          .slice(0, 16)}
+                        max={dayjs().format("YYYY-MM-DDT23:59")}
                         {...field}
                       />
                     </FormControl>
@@ -193,9 +191,13 @@ export const BloodSugarDialog: React.FC<Props> = ({
                         <Input
                           placeholder="mmol/L"
                           {...field}
-                          onChange={(event) =>
-                            field.onChange(+event.target.value ?? 0)
-                          }
+                          onChange={(event) => {
+                            if (Number.isNaN(+event.target.value)) {
+                              event.preventDefault();
+                              return;
+                            }
+                            field.onChange(+event.target.value ?? 0);
+                          }}
                         />
                       </FormControl>
                       <FormMessage />
