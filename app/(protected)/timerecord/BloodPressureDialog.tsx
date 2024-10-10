@@ -132,7 +132,11 @@ export const BloodPressureDialog: React.FC<Props> = ({
                     <FormControl>
                       <Input
                         type="datetime-local"
-                        max={dayjs().toISOString().slice(0, 16)}
+                        max={dayjs()
+                          .add(1, "day")
+                          .startOf("day")
+                          .toISOString()
+                          .slice(0, 16)}
                         {...field}
                       />
                     </FormControl>
