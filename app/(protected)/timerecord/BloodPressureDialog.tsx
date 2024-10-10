@@ -26,13 +26,12 @@ import dayjs from "dayjs";
 import { toast } from "sonner";
 import { BloodPressureDTO as BloodPressure } from "@/app/api/bloodPressures/dto";
 
-const formSchema = z
-  .object({
-    datetime: z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/g),
-    sbp: z.number().min(0),
-    dbp: z.number().min(0),
-    pulse: z.number().min(0),
-  })
+const formSchema = z.object({
+  datetime: z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/g),
+  sbp: z.number().min(0),
+  dbp: z.number().min(0),
+  pulse: z.number().min(0),
+});
 
 interface Props {
   onSuccess: () => void;
@@ -132,7 +131,11 @@ export const BloodPressureDialog: React.FC<Props> = ({
                     <FormControl>
                       <Input
                         type="datetime-local"
-                        max={dayjs().toISOString().slice(0, 16)}
+                        max={dayjs()
+                          .add(1, "day")
+                          .startOf("day")
+                          .toISOString()
+                          .slice(0, 16)}
                         {...field}
                       />
                     </FormControl>
