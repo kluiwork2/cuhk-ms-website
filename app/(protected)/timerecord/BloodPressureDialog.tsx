@@ -26,13 +26,12 @@ import dayjs from "dayjs";
 import { toast } from "sonner";
 import { BloodPressureDTO as BloodPressure } from "@/app/api/bloodPressures/dto";
 
-const formSchema = z
-  .object({
-    datetime: z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/g),
-    sbp: z.number().min(0),
-    dbp: z.number().min(0),
-    pulse: z.number().min(0),
-  })
+const formSchema = z.object({
+  datetime: z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/g),
+  sbp: z.number().min(0),
+  dbp: z.number().min(0),
+  pulse: z.number().min(0),
+});
 
 interface Props {
   onSuccess: () => void;
@@ -45,8 +44,9 @@ export const BloodPressureDialog: React.FC<Props> = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      datetime: dayjs(bloodPressure?.datetime).format("YYYY-MM-DDTHH:mm"),
+      datetime: dayjs().format("YYYY-MM-DDTHH:mm"),
       ...(bloodPressure && {
+        datetime: dayjs(bloodPressure.datetime).format("YYYY-MM-DDTHH:mm"),
         sbp: bloodPressure.sbp ?? 20,
         dbp: bloodPressure.dbp ?? 20,
         pulse: bloodPressure.pulse ?? 20,
@@ -78,6 +78,7 @@ export const BloodPressureDialog: React.FC<Props> = ({
             }),
           }
         );
+        toast.success("成功編輯");
       } else {
         await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/bloodPressures`, {
           method: "POST",
@@ -92,10 +93,10 @@ export const BloodPressureDialog: React.FC<Props> = ({
             datetime: new Date(values.datetime).toISOString(),
           }),
         });
+        toast.success("血壓紀錄新增!");
       }
       setOpen(false);
       onSuccess();
-      toast.success("血壓紀錄新增!");
       form.reset();
     } catch (e) {
       console.error(e);
@@ -132,11 +133,7 @@ export const BloodPressureDialog: React.FC<Props> = ({
                     <FormControl>
                       <Input
                         type="datetime-local"
-                        max={dayjs()
-                          .add(1, "day")
-                          .startOf("day")
-                          .toISOString()
-                          .slice(0, 16)}
+                        max={dayjs().format("YYYY-MM-DDT23:59")}
                         {...field}
                       />
                     </FormControl>
@@ -163,9 +160,13 @@ export const BloodPressureDialog: React.FC<Props> = ({
                       <FormControl>
                         <Input
                           {...field}
-                          onChange={(event) =>
-                            field.onChange(+event.target.value ?? 0)
-                          }
+                          onChange={(event) => {
+                            if (Number.isNaN(+event.target.value)) {
+                              event.preventDefault();
+                              return;
+                            }
+                            field.onChange(+event.target.value ?? 0);
+                          }}
                         />
                       </FormControl>
                       <FormMessage />
