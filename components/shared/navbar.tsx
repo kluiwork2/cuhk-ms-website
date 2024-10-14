@@ -7,6 +7,7 @@ import MobileNav from "@/components/shared/mobilenav";
 import { LoginButton } from "../auth/login-button";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { LogoutButton } from "../auth/logout-button";
+import Link from "next/link";
 
 export const Navbar = () => {
   const user = useCurrentUser();
@@ -22,6 +23,13 @@ export const Navbar = () => {
         <MobileNav />
         <div className="md:flex-between max-w-xs space-x-4 md:block md:w-auto items-center justify-between hidden w-full">
           {isLoggedIn ? (
+            <Button variant="ghost" size="lg">
+              <Link href="/timerecord">我要記錄</Link>
+            </Button>
+          ) : (
+            <></>
+          )}
+           {isLoggedIn ? (
             <LogoutButton>
               <Button variant="default" size="lg">
                 登出
