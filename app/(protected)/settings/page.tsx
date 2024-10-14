@@ -60,11 +60,13 @@ const SettingsPage = () => {
         .then((data) => {
           if (data.error) {
             setError(data.error);
+            setSuccess(undefined);
           }
 
           if (data.success) {
             update();
             setSuccess(data.success);
+            setError(undefined);
           }
         })
         .catch(() => setError("Something went wrong!"));
@@ -86,7 +88,7 @@ const SettingsPage = () => {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>名稱</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
@@ -103,7 +105,7 @@ const SettingsPage = () => {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>電郵</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
@@ -121,7 +123,7 @@ const SettingsPage = () => {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel>舊密碼</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
@@ -139,7 +141,7 @@ const SettingsPage = () => {
                 name="newPassword"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>New Password</FormLabel>
+                    <FormLabel>新密碼</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
@@ -152,7 +154,7 @@ const SettingsPage = () => {
                   </FormItem>
                 )}
               />
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="role"
                 render={({ field }) => (
@@ -176,7 +178,7 @@ const SettingsPage = () => {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
               {process.env.NEXT_ENABLE_TWO_FACTOR_AUTH === "true" &&
                 user?.isOAuth === false && (
                   <FormField

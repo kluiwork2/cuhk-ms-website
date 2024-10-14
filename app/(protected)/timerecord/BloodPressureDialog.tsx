@@ -60,6 +60,11 @@ export const BloodPressureDialog: React.FC<Props> = ({
   const submitHandler = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
     try {
+      const data = {
+        ...values,
+        datetime: dayjs(values.datetime).toISOString(),
+      };
+
       if (bloodPressure) {
         await fetch(
           `${process.env.NEXT_PUBLIC_APP_API_URL}/bloodPressures/${bloodPressure.id}`,
@@ -69,12 +74,8 @@ export const BloodPressureDialog: React.FC<Props> = ({
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              ...values,
               id: bloodPressure.id,
-              sbp: values.sbp,
-              dbp: values.dbp,
-              pulse: values.pulse,
-              datetime: new Date(values.datetime).toISOString(),
+              ...data,
             }),
           }
         );
@@ -85,13 +86,7 @@ export const BloodPressureDialog: React.FC<Props> = ({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            ...values,
-            sbp: Number(values.sbp),
-            dbp: Number(values.dbp),
-            pulse: Number(values.pulse),
-            datetime: new Date(values.datetime).toISOString(),
-          }),
+          body: JSON.stringify(data),
         });
         toast.success("血壓紀錄新增!");
       }

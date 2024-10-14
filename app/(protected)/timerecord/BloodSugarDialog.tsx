@@ -89,7 +89,7 @@ export const BloodSugarDialog: React.FC<Props> = ({
       ...(values.beforeSleep && {
         beforeSleep: values.beforeSleep,
       }),
-      datetime: new Date(values.datetime).toISOString(),
+      datetime: dayjs(values.datetime).toISOString(),
     };
 
     try {
@@ -102,7 +102,7 @@ export const BloodSugarDialog: React.FC<Props> = ({
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              ...values,
+              id: bloodSugar.id,
               ...data,
             }),
           }
@@ -114,10 +114,7 @@ export const BloodSugarDialog: React.FC<Props> = ({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            ...values,
-            ...data,
-          }),
+          body: JSON.stringify(data),
         });
         toast.success("血糖紀錄新增!");
       }

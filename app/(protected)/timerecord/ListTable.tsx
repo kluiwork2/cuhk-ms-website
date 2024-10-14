@@ -9,6 +9,7 @@ import { BloodPressureDialog } from "./BloodPressureDialog";
 import { BloodSugarDialog } from "./BloodSugarDialog";
 import { TimeRecordDialog } from "./TimeRecordDialog";
 import { ACTIVITIES_TYPE_ZH_MAP } from "@/constants/monthlyscheduler";
+import dayjs from "dayjs";
 interface Props {
   timeRecords: TimeRecord[];
   bloodSugars: BloodSugar[];
@@ -16,6 +17,10 @@ interface Props {
   onUpdatedSuccess: (
     type?: "timeRecords" | "bloodSugars" | "bloodPressures"
   ) => void;
+}
+
+const getDateTimeString = (datetime: string) => {
+  return dayjs(datetime).format("YYYY-MM-DD HH:mm");
 }
 
 export const ListTable: React.FC<Props> = ({
@@ -116,7 +121,7 @@ export const ListTable: React.FC<Props> = ({
                 "rounded-bl-md": key === timeRecords.length - 1,
               })}
             >
-              {timeRecord.datetime}
+              {getDateTimeString(timeRecord.datetime)}
             </div>
             <div className="bg-white px-4 py-2 flex items-center">
               {ACTIVITIES_TYPE_ZH_MAP[timeRecord.activityType]}
@@ -156,7 +161,9 @@ export const ListTable: React.FC<Props> = ({
         {bloodSugars?.map((bloodSugar, key) => (
           <div key={key} className="bg-white rounded-lg mb-4">
             <div className="flex justify-between items-center bg-blue-600 px-4 py-2 rounded-t-lg">
-              <div className="text-white">日期：{bloodSugar.datetime}</div>
+              <div className="text-white">
+                日期：{getDateTimeString(bloodSugar.datetime)}
+              </div>
               <div className="flex gap-2">
                 <BloodSugarDialog
                   bloodSugar={bloodSugar}
@@ -195,7 +202,9 @@ export const ListTable: React.FC<Props> = ({
         {bloodPressures?.map((bloodPressure, key) => (
           <div key={key} className="bg-white rounded-lg mb-4">
             <div className="flex justify-between bg-blue-600 px-4 py-2 rounded-t-lg items-center">
-              <div className="text-white">日期：{bloodPressure.datetime}</div>
+              <div className="text-white">
+                日期：{getDateTimeString(bloodPressure.datetime)}
+              </div>
               <div className="flex gap-2">
                 <BloodPressureDialog
                   bloodPressure={bloodPressure}
