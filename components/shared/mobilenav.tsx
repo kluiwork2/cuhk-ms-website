@@ -14,6 +14,7 @@ import { LoginButton } from "@/components/auth/login-button";
 import { Button } from "@/components/ui/button";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { LogoutButton } from "../auth/logout-button";
+import Link from "next/link";
 
 const MobileNav = () => {
   const user = useCurrentUser();
@@ -27,6 +28,13 @@ const MobileNav = () => {
         </SheetTrigger>
         <SheetContent className="flex flex-col gap-6 bg-white md:hidden">
           <Image src="/oldman.png" alt="logo" width={128} height={38} />
+          {isLoggedIn ? (
+            <Button variant="ghost" size="lg">
+              <Link href="/timerecord">我要記錄</Link>
+            </Button>
+          ) : (
+            <></>
+          )}
           {isLoggedIn ? (
             <LogoutButton>
               <Button variant="default" size="lg">
