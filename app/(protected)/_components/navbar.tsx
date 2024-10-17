@@ -24,6 +24,12 @@ export const Navbar = () => {
         >
           <Link href="/timerecord">我要記錄</Link>
         </Button>
+        <Button
+          asChild
+          variant={pathname === "/settings" ? "default" : "outline"}
+        >
+          <Link href="/settings">帳戶設定</Link>
+        </Button>
       </div>
       <UserButton />
     </nav>
