@@ -1,5 +1,11 @@
 import { TimeRecord, activityType as ActivityEnum } from "@prisma/client";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from 'dayjs/plugin/timezone'
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.tz.setDefault("Asia/Hong_Kong");
 
 export interface TimeRecordDTO
   extends Omit<TimeRecord, "datetime" | "activityType"> {
@@ -11,7 +17,7 @@ export function transformTimeRecord(timeRecord: TimeRecord) {
   return {
     ...timeRecord,
     activityType: transformActivityType(timeRecord.activityType),
-    datetime: dayjs(timeRecord.datetime).format("YYYY-MM-DD HH:mm:ss"),
+    datetime: dayjs(timeRecord.datetime).toISOString(),
   };
 }
 

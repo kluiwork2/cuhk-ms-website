@@ -70,7 +70,8 @@ export const TimeRecordDialog: React.FC<Props> = ({
   const submitHandler = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
     const data = {
-      datetime: new Date(values.datetime).toISOString(),
+      ...values,
+      datetime: dayjs(values.datetime).toISOString(),
     };
 
     try {
@@ -83,7 +84,7 @@ export const TimeRecordDialog: React.FC<Props> = ({
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              ...values,
+              id: timeRecord.id,
               ...data,
             }),
           }
@@ -95,10 +96,7 @@ export const TimeRecordDialog: React.FC<Props> = ({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            ...values,
-            ...data,
-          }),
+          body: JSON.stringify(data),
         });
         toast.success("運動紀錄新增成功!");
       }
