@@ -11,9 +11,11 @@ import {
   TimeScale,
 } from "chart.js";
 import dayjs from "dayjs";
-import "chartjs-adapter-dayjs-4/dist/chartjs-adapter-dayjs-4.esm";
 import { useMemo } from "react";
 import { BloodPressureDTO } from "@/app/api/bloodPressures/dto";
+import "chartjs-adapter-date-fns";
+import { zhHK } from "date-fns/locale";
+import _groupBy from "lodash/groupBy";
 
 ChartJS.register(
   TimeScale,
@@ -29,7 +31,7 @@ ChartJS.register(
 const CHARTS: { title: string; key: keyof BloodPressureDTO }[] = [
   { title: "上壓 (mmHg)", key: "sbp" },
   { title: "下壓 (mmHg)", key: "dbp" },
-  { title: "脈搏 (mmHg)", key: "pulse" },
+  { title: "脈搏 (次/分鐘)", key: "pulse" },
 ];
 
 interface PulseChartProps {
@@ -38,21 +40,39 @@ interface PulseChartProps {
 
 const PulseChart: React.FC<PulseChartProps> = ({ bloodPressures }) => {
   const { morning, afternoon, night } = useMemo(() => {
-    let morning: BloodPressureDTO[] = [];
-    let afternoon: BloodPressureDTO[] = [];
-    let night: BloodPressureDTO[] = [];
+    let morningMap: { [date: string]: BloodPressureDTO } = {};
+    let afternoonMap: { [date: string]: BloodPressureDTO } = {};
+    let nightMap: { [date: string]: BloodPressureDTO } = {};
 
     bloodPressures.forEach((t) => {
       const hour = dayjs(t.datetime).hour();
+      const date = dayjs(t.datetime).format("YYYY-MM-DD");
+
       if (hour > 5 && hour < 12) {
-        morning.push(t);
+        if (!morningMap[date]) {
+          morningMap[date] = t;
+        }
+        morningMap[date] =
+          t.datetime > morningMap[date].datetime ? t : morningMap[date];
       } else if (hour > 11 && hour < 18) {
-        afternoon.push(t);
+        if (!afternoonMap[date]) {
+          afternoonMap[date] = t;
+        }
+        afternoonMap[date] =
+          t.datetime > afternoonMap[date].datetime ? t : afternoonMap[date];
       } else {
-        night.push(t);
+        if (!nightMap[date]) {
+          nightMap[date] = t;
+        }
+        nightMap[date] =
+          t.datetime > nightMap[date].datetime ? t : nightMap[date];
       }
     });
-    return { morning, afternoon, night };
+    return {
+      morning: Object.values(morningMap),
+      afternoon: Object.values(afternoonMap),
+      night: Object.values(nightMap),
+    };
   }, [bloodPressures]);
 
   return CHARTS.map(({ title, key }) => (
@@ -87,12 +107,15 @@ const PulseChart: React.FC<PulseChartProps> = ({ bloodPressures }) => {
             type: "time",
             title: {
               display: true,
-              text: "Date",
+              text: "日期",
             },
-            min: dayjs(bloodPressures[0].datetime).startOf("month").toISOString(),
-            max: dayjs(
-              bloodPressures[bloodPressures.length - 1].datetime
-            ).toISOString(),
+            adapters: {
+              date: {
+                locale: zhHK,
+              },
+            },
+            min: dayjs().add(-30, "days").toISOString(),
+            max: dayjs().toISOString(),
             ticks: {
               includeBounds: true,
             },
@@ -111,7 +134,7 @@ const PulseChart: React.FC<PulseChartProps> = ({ bloodPressures }) => {
             : [],
         datasets: [
           {
-            label: "上午",
+            label: "上午：06:00 - 11:59",
             data: morning
               .filter((t) => dayjs(t.datetime))
               .map((t) => ({
@@ -124,7 +147,7 @@ const PulseChart: React.FC<PulseChartProps> = ({ bloodPressures }) => {
             showLine: false,
           },
           {
-            label: "下午",
+            label: "下午：12:00 - 17:59",
             data: afternoon
               .filter((t) => dayjs(t.datetime))
               .map((t) => ({
@@ -137,7 +160,7 @@ const PulseChart: React.FC<PulseChartProps> = ({ bloodPressures }) => {
             showLine: false,
           },
           {
-            label: "晚上",
+            label: "晚上：18:00 - 第二日05:59",
             data: night
               .filter((t) => dayjs(t.datetime))
               .map((t) => ({

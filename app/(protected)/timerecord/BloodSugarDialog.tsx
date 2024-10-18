@@ -27,15 +27,49 @@ import { toast } from "sonner";
 import { BloodSugarDTO as BloodSugar } from "@/app/api/bloodSugars/dto";
 
 const formSchema = z.object({
-  datetime: z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/g),
-  beforeBreakfast: z.number().optional(),
-  afterBreakfast: z.number().optional(),
-  beforeLunch: z.number().optional(),
-  afterLunch: z.number().optional(),
-  beforeDinner: z.number().optional(),
-  afterDinner: z.number().optional(),
-  beforeSleep: z.number().optional(),
-  remarks: z.string().optional(),
+  datetime: z
+    .string({ required_error: "必填項目" })
+    .regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/g),
+  beforeBreakfast: z
+    .number()
+    .min(1, { message: "血糖數值有效範圍: 1.0mmol/L至30.0mmol/L" })
+    .max(30, { message: "血糖數值有效範圍: 1.0mmol/L至30.0mmol/L" })
+    .optional(),
+  afterBreakfast: z
+    .number()
+    .min(1, { message: "血糖數值有效範圍: 1.0mmol/L至30.0mmol/L" })
+    .max(30, { message: "血糖數值有效範圍: 1.0mmol/L至30.0mmol/L" })
+    .optional(),
+  beforeLunch: z
+    .number()
+    .min(1, { message: "血糖數值有效範圍: 1.0mmol/L至30.0mmol/L" })
+    .max(30, { message: "血糖數值有效範圍: 1.0mmol/L至30.0mmol/L" })
+    .optional(),
+  afterLunch: z
+    .number()
+    .min(1, { message: "血糖數值有效範圍: 1.0mmol/L至30.0mmol/L" })
+    .max(30, { message: "血糖數值有效範圍: 1.0mmol/L至30.0mmol/L" })
+    .optional(),
+  beforeDinner: z
+    .number()
+    .min(1, { message: "血糖數值有效範圍: 1.0mmol/L至30.0mmol/L" })
+    .max(30, { message: "血糖數值有效範圍: 1.0mmol/L至30.0mmol/L" })
+    .optional(),
+  afterDinner: z
+    .number()
+    .min(1, { message: "血糖數值有效範圍: 1.0mmol/L至30.0mmol/L" })
+    .max(30, { message: "血糖數值有效範圍: 1.0mmol/L至30.0mmol/L" })
+    .optional(),
+  beforeSleep: z
+    .number()
+    .min(1, { message: "血糖數值有效範圍: 1.0mmol/L至30.0mmol/L" })
+    .max(30, { message: "血糖數值有效範圍: 1.0mmol/L至30.0mmol/L" })
+    .optional(),
+  remarks: z
+    .string()
+    .min(1, { message: "血糖數值有效範圍: 1.0mmol/L至30.0mmol/L" })
+    .max(30, { message: "血糖數值有效範圍: 1.0mmol/L至30.0mmol/L" })
+    .optional(),
 });
 
 interface Props {
@@ -167,15 +201,19 @@ export const BloodSugarDialog: React.FC<Props> = ({
             />
             {(
               [
-                { field: "beforeBreakfast", label: "早餐前" },
-                { field: "afterBreakfast", label: "早餐後" },
-                { field: "beforeLunch", label: "午餐前" },
-                { field: "afterLunch", label: "午餐後" },
-                { field: "beforeDinner", label: "晚餐前" },
-                { field: "afterDinner", label: "晚餐後" },
-                { field: "beforeSleep", label: "睡覺前" },
+                { field: "beforeBreakfast", label: "早餐前", alertValue: 7 },
+                { field: "afterBreakfast", label: "早餐後", alertValue: 10 },
+                { field: "beforeLunch", label: "午餐前", alertValue: Infinity },
+                { field: "afterLunch", label: "午餐後", alertValue: 10 },
+                {
+                  field: "beforeDinner",
+                  label: "晚餐前",
+                  alertValue: Infinity,
+                },
+                { field: "afterDinner", label: "晚餐後", alertValue: 10 },
+                { field: "beforeSleep", label: "睡覺前", alertValue: Infinity },
               ] as const
-            ).map(({ field, label }) => (
+            ).map(({ field, label, alertValue }) => (
               <FormField
                 key={field}
                 control={form.control}
@@ -187,13 +225,17 @@ export const BloodSugarDialog: React.FC<Props> = ({
                       <FormControl>
                         <Input
                           placeholder="mmol/L"
-                          {...field}
+                          className={
+                            (field?.value ?? 0) >= alertValue
+                              ? "text-destructive"
+                              : ""
+                          }
+                          {...form.register(field.name, {
+                            setValueAs: (v) =>
+                              v === "" ? undefined : parseInt(v, 10),
+                          })}
                           onChange={(event) => {
-                            if (Number.isNaN(+event.target.value)) {
-                              event.preventDefault();
-                              return;
-                            }
-                            field.onChange(+event.target.value ?? 0);
+                            field.onChange(+event.target.value);
                           }}
                         />
                       </FormControl>

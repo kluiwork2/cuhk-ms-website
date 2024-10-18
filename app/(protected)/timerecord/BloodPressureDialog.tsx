@@ -26,12 +26,28 @@ import dayjs from "dayjs";
 import { toast } from "sonner";
 import { BloodPressureDTO as BloodPressure } from "@/app/api/bloodPressures/dto";
 
-const formSchema = z.object({
-  datetime: z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/g),
-  sbp: z.number().min(0),
-  dbp: z.number().min(0),
-  pulse: z.number().min(0),
-});
+const formSchema = z
+  .object({
+    datetime: z
+      .string({ required_error: "必填項目" })
+      .regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/g),
+    sbp: z
+      .number({ required_error: "必填項目" })
+      .min(0, { message: "血壓有效範圍：0-200mmHg" })
+      .max(200, { message: "血壓有效範圍：0-200mmHg" }),
+    dbp: z
+      .number({ required_error: "必填項目" })
+      .min(0, { message: "血壓有效範圍：0-200mmHg" })
+      .max(200, { message: "血壓有效範圍：0-200mmHg" }),
+    pulse: z
+      .number({ required_error: "必填項目" })
+      .min(20, { message: "脈搏有效範圍：20-200次/分鐘" })
+      .max(200, { message: "脈搏有效範圍：20-200次/分鐘" }),
+  })
+  .refine((data) => data.sbp > data.dbp, {
+    message: "下壓需要低於上壓",
+    path: ["formError"],
+  });
 
 interface Props {
   onSuccess: () => void;
@@ -139,11 +155,15 @@ export const BloodPressureDialog: React.FC<Props> = ({
             />
             {(
               [
-                { field: "sbp", label: "上壓(mmhg)" },
-                { field: "dbp", label: "下壓(mmhg)" },
-                { field: "pulse", label: "脈搏(mmhg)" },
+                { field: "sbp", label: "上壓(mmHg)", alertValue: 140 },
+                { field: "dbp", label: "下壓(mmHg)", alertValue: 90 },
+                {
+                  field: "pulse",
+                  label: "脈搏(次/分鐘)",
+                  alertValue: Infinity,
+                },
               ] as const
-            ).map(({ field, label }) => (
+            ).map(({ field, label, alertValue }) => (
               <FormField
                 key={field}
                 control={form.control}
@@ -154,13 +174,18 @@ export const BloodPressureDialog: React.FC<Props> = ({
                       <FormLabel>{label}</FormLabel>
                       <FormControl>
                         <Input
-                          {...field}
+                          type="number"
+                          className={
+                            (field?.value ?? 0) >= alertValue
+                              ? "text-destructive"
+                              : ""
+                          }
+                          {...form.register(field.name, {
+                            setValueAs: (v) =>
+                              v === "" ? undefined : parseInt(v, 10),
+                          })}
                           onChange={(event) => {
-                            if (Number.isNaN(+event.target.value)) {
-                              event.preventDefault();
-                              return;
-                            }
-                            field.onChange(+event.target.value ?? 0);
+                            field.onChange(+event.target.value);
                           }}
                         />
                       </FormControl>
@@ -170,6 +195,16 @@ export const BloodPressureDialog: React.FC<Props> = ({
                 }}
               />
             ))}
+            {Object.values(form.formState.errors)
+              .filter(({ type }) => type === "custom")
+              .map((error) => (
+                <span
+                  className="text-[0.8rem] font-medium text-destructive"
+                  key={error.message}
+                >
+                  {error.message}
+                </span>
+              ))}
             <DialogFooter>
               <Button type="submit">
                 {isSubmitting ? "提交中..." : "提交"}

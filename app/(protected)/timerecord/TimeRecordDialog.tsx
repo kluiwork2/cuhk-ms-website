@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
   DialogContent,
@@ -36,10 +35,12 @@ import { ACTIVITIES_TYPE_OPTIONS } from "@/constants/monthlyscheduler";
 import { TimeRecordDTO as TimeRecord } from "@/app/api/timeRecords/dto";
 
 const formSchema = z.object({
-  datetime: z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/g),
-  location: z.string().optional(),
-  activityType: z.string(),
-  durationInMin: z.number().min(1),
+  datetime: z
+    .string({ required_error: "必填項目" })
+    .regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/g),
+  location: z.string({ required_error: "必填項目" }).optional(),
+  activityType: z.string({ required_error: "必填項目" }),
+  durationInMin: z.number({ required_error: "必填項目" }).min(1),
 });
 
 interface Props {
@@ -169,12 +170,12 @@ export const TimeRecordDialog: React.FC<Props> = ({
                     <FormLabel>分鐘</FormLabel>
                     <FormControl>
                       <Input
-                        {...field}
+                        {...form.register("durationInMin", {
+                          setValueAs: (v) =>
+                            v === "" ? undefined : parseInt(v, 10),
+                        })}
+                        type="number"
                         onChange={(event) => {
-                          if (Number.isNaN(+event.target.value)) {
-                            event.preventDefault();
-                            return;
-                          }
                           field.onChange(+event.target.value);
                         }}
                       />
