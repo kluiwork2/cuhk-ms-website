@@ -225,9 +225,9 @@ export const ListTable: React.FC<Props> = ({
               </div>
             </div>
             <div className="grid grid-cols-2 px-4 py-2">
-              <div>上壓: {bloodPressure.sbp ?? "-"} mmhg</div>
-              <div>下壓: {bloodPressure.dbp ?? "-"} mmhg</div>
-              <div>脈搏: {bloodPressure.pulse ?? "-"} mmhg</div>
+              <div>上壓: {bloodPressure.sbp ?? "-"} mmHg</div>
+              <div>下壓: {bloodPressure.dbp ?? "-"} mmHg</div>
+              <div>脈搏: {bloodPressure.pulse ?? "-"} 次/分鐘</div>
             </div>
           </div>
         ))}

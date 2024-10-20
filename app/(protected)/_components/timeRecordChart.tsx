@@ -11,9 +11,10 @@ import {
   TimeScale,
 } from "chart.js";
 import dayjs from "dayjs";
-import "chartjs-adapter-dayjs-4/dist/chartjs-adapter-dayjs-4.esm";
 import { useMemo } from "react";
 import { TimeRecordDTO } from "@/app/api/timeRecords/dto";
+import "chartjs-adapter-date-fns";
+import { zhHK } from 'date-fns/locale'
 
 ChartJS.register(
   TimeScale,
@@ -62,7 +63,7 @@ const TimeRecordChart: React.FC<TimeRecordChartProps> = ({ timeRecords }) => {
           },
           legend: {
             display: false,
-          }
+          },
         },
         scales: {
           y: {
@@ -80,11 +81,16 @@ const TimeRecordChart: React.FC<TimeRecordChartProps> = ({ timeRecords }) => {
               display: true,
               text: "日期",
             },
-            min: dayjs(timeRecords[0].datetime).startOf("month").toISOString(),
-            max : dayjs(timeRecords[timeRecords.length - 1].datetime).toISOString() ,
-            ticks:{
+            adapters: {
+              date: {
+                locale: zhHK,
+              },
+            },
+            min: dayjs().add(-30, 'days').toISOString(),
+            max: dayjs().toISOString(),
+            ticks: {
               includeBounds: true,
-            }
+            },
           },
         },
       }}
