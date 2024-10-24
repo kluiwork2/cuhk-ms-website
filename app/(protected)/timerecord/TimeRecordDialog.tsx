@@ -40,7 +40,10 @@ const formSchema = z.object({
     .regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/g),
   location: z.string({ required_error: "必填項目" }).optional(),
   activityType: z.string({ required_error: "必填項目" }),
-  durationInMin: z.number({ required_error: "必填項目" }).min(1),
+  durationInMin: z
+    .number({ required_error: "必填項目" })
+    .min(10, { message: "最少10分鐘" })
+    .max(300, { message: "最多300分鐘" }),
 });
 
 interface Props {

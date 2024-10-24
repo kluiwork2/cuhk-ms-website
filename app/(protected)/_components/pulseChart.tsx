@@ -28,10 +28,10 @@ ChartJS.register(
   Legend
 );
 
-const CHARTS: { title: string; key: keyof BloodPressureDTO }[] = [
-  { title: "上壓 (mmHg)", key: "sbp" },
-  { title: "下壓 (mmHg)", key: "dbp" },
-  { title: "脈搏 (次/分鐘)", key: "pulse" },
+const CHARTS: { title: string; key: keyof BloodPressureDTO, yTitle: string }[] = [
+  { title: "上壓 (mmHg)", key: "sbp", yTitle: "mmHg" },
+  { title: "下壓 (mmHg)", key: "dbp", yTitle: "mmHg" },
+  { title: "脈搏 (次/分鐘)", key: "pulse", yTitle: "次/分鐘" },
 ];
 
 interface PulseChartProps {
@@ -75,7 +75,7 @@ const PulseChart: React.FC<PulseChartProps> = ({ bloodPressures }) => {
     };
   }, [bloodPressures]);
 
-  return CHARTS.map(({ title, key }) => (
+  return CHARTS.map(({ title, key, yTitle }) => (
     <Line
       className="mb-5"
       key={key}
@@ -100,7 +100,7 @@ const PulseChart: React.FC<PulseChartProps> = ({ bloodPressures }) => {
             display: true,
             title: {
               display: true,
-              text: "(mmHg)",
+              text: yTitle,
             },
           },
           x: {
