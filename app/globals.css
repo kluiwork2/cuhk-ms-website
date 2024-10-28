@@ -77,18 +77,18 @@ body,
   padding: 0;
   margin: 0;
   scroll-behavior: smooth;
-  font-family: var(--font-dengxian);
+  font-family: var(--font-notasanstc);
 }
 
 body {
-  font-family: var(--font-dengxian);
+  font-family: var(--font-notasanstc);
 }
 
 p {
   color: black;
   margin-top: 1rem /* 16px */;
   margin-bottom: 2rem /* 32px */;
-  font-family: var(--font-dengxian);
+  font-family: var(--font-notasanstc);
   font-weight: 500;
   line-height: 2.5rem /* 40px */;
   font-size: 20px;
@@ -100,13 +100,13 @@ h2 {
   font-weight: 600;
   line-height: 1;
   padding-bottom: 2.5rem /* 40px */;
-  font-family: var(--font-dengxian);
+  font-family: var(--font-notasanstc);
 }
 
 @media (min-width: 1024px) {
   h2 {
     font-size: 3.75rem /* 60px */;
-    font-family: var(--font-dengxian);
+    font-family: var(--font-notasanstc);
   }
 }
 
@@ -121,7 +121,7 @@ h4 {
   font-weight: 600;
   line-height: 1;
   padding-bottom: 2.5rem; /* 40px */
-  font-family: var(--font-dengxian);
+  font-family: var(--font-notasanstc);
 }
 /* ========================================== TAILWIND STYLES */
 @layer utilities {

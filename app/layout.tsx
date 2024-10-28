@@ -9,14 +9,14 @@ import { Navbar } from "@/components/shared/navbar";
 
 import local from "next/font/local";
 
-const dengxian = local({
+const notasanstc = local({
   src: [
     {
-      path: "../public/fonts/Dengl.otf",
-      weight: "500",
+      path: "../public/fonts/NotoSansTC-Regular.ttf",
+      weight: "400",
     },
   ],
-  variable: "--font-dengxian",
+  variable: "--font-notasanstc",
 });
 
 export const metadata: Metadata = {
@@ -34,7 +34,7 @@ export default async function RootLayout({
   return (
     <SessionProvider session={session}>
       <html lang="en">
-        <body className={`${dengxian.variable}`}>
+        <body className={`${notasanstc.variable}`}>
           <Toaster />
           <Navbar />
           <main className="bg-slate-100">{children}</main>
