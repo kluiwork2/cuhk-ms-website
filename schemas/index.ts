@@ -37,13 +37,13 @@ export const NewPasswordSchema = z.object({
 });
 
 export const ResetSchema = z.object({
-  email: z.string().email({
+  email: z.string().min(1, {
     message: "Email is required",
   }),
 });
 
 export const LoginSchema = z.object({
-  email: z.string().email({
+  email: z.string().min(1, {
     message: "Email is required",
   }),
   password: z.string().min(1, {
@@ -53,7 +53,7 @@ export const LoginSchema = z.object({
 });
 
 export const RegisterSchema = z.object({
-  email: z.string().email({
+  email: z.string().min(1, {
     message: "Email is required",
   }),
   password: z.string().min(6, {
