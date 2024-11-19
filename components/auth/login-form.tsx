@@ -87,7 +87,7 @@ export const LoginForm = memo(() => {
                       {...field}
                       disabled={isPending}
                       placeholder="peter.chan@yahoo.com"
-                      type="email"
+                      type="text"
                     />
                   </FormControl>
                   <FormMessage />
