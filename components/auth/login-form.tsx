@@ -81,13 +81,13 @@ export const LoginForm = memo(() => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>電子郵件地址</FormLabel>
+                  <FormLabel>電子郵件地址或電話號碼</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       disabled={isPending}
                       placeholder="peter.chan@yahoo.com"
-                      type="text"
+                      type="email"
                     />
                   </FormControl>
                   <FormMessage />
